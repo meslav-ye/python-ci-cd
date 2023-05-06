@@ -36,9 +36,24 @@ jobs:
       run: |
         export PYTHONPATH=src
         pytest
-  build-docker-image:
+  build-and-push-docker-image:
     needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag mislavjelusic:$(date +%s)
+    
+    - name: Clone repo in runner
+      uses: actions/checkout@v3
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }} 
+
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v4.0.0
+      with:
+        push: true
+        tags: mislavhuddle/helloflask:latest
+   
+    
