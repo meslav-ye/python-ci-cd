@@ -15,7 +15,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Clone repo in runner
+      uses: actions/checkout@v3
     - name: Set up Python 3.9
       uses: actions/setup-python@v3
       with:
@@ -33,8 +34,11 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
       run: |
-        pip3 install pytest
         export PYTHONPATH=src
         pytest
+  build-docker-image:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag mislavjelusic:$(date +%s)
