@@ -57,14 +57,14 @@ jobs:
         tags: mislavhuddle/helloflask:${{ github.sha }}
 
   Deploy:
-    needs: build
+    needs: build-and-push-docker-imag
     runs-on: ubuntu-latest
     steps:
     
       - name: Checkout repo
         uses: actions/checkout@v2
         with:
-          repository: https://github.com/meslav-ye/python-app-deployment.git
+          repository: meslav-ye/python-app-deployment.git
           ref: main
           token: ${{ secrets.CHART_REPO_TOKEN }}
 
