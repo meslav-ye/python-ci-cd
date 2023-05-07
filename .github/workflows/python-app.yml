@@ -57,7 +57,7 @@ jobs:
         tags: mislavhuddle/helloflask:${{ github.sha }}
 
   Deploy:
-    needs: build-and-push-docker-imag
+    needs: build-and-push-docker-image
     runs-on: ubuntu-latest
     steps:
     
