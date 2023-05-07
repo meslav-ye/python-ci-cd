@@ -77,7 +77,7 @@ jobs:
           VERSION=$(echo $VERSION | awk -F '.' '{print $1"."$2"."$3+1}')
           sed -i "s/version: $VERSION/version: $VERSION/g" python-app-service/Chart.yaml
           currTag=$(cat python-app-service/values.yaml | grep -w tag | awk {'print $2'})
-          sed -i "s/tag: \$currTag/tag: ${{ github.sha }}/g" "python-app-service/values.yaml"
+          sed -i "s/tag: $currTag/tag: ${{ github.sha }}/g" "python-app-service/values.yaml"
 
       - name: Commit and push changes
         run: |
