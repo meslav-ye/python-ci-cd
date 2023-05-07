@@ -54,6 +54,39 @@ jobs:
       uses: docker/build-push-action@v4.0.0
       with:
         push: true
-        tags: mislavhuddle/helloflask:latest
+        tags: mislavhuddle/helloflask:${{ github.sha }}
+
+  Deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    
+      - name: Checkout repo
+        uses: actions/checkout@v2
+        with:
+          repository: https://github.com/meslav-ye/python-app-deployment.git
+          ref: main
+          token: ${{ secrets.CHART_REPO_TOKEN }}
+
+      - name: Get current version
+        run: echo "Current version is $(cat python-app-service/Chart.yaml | grep version | cut -d ' ' -f 2)"
+
+      - name: Increment version
+        run: |
+          VERSION=$(cat python-app-service/Chart.yaml | grep version | cut -d ' ' -f 2)
+          VERSION=$(echo $VERSION | awk -F '.' '{print $1"."$2"."$3+1}')
+          sed -i "s/version: $VERSION/version: $VERSION/g" python-app-service/Chart.yaml
+          currTag=$(cat python-app-service/values.yaml | grep -w tag | awk {'print $2'})
+          sed -i "s/tag: \$currTag/tag: ${{ github.sha }}/g" "python-app-service/values.yaml"
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.email "misso998@gmail.com"
+          git config --global user.name "Mislav Jelusic"
+          git add python-app-service/Chart.yaml values.yaml
+          git commit -m "Update version to $(cat python-app-service/Chart.yaml | grep version | cut -d ' ' -f 2)"
+          git push origin main
+
+
    
     
