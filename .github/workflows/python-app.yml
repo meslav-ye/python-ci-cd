@@ -83,7 +83,7 @@ jobs:
         run: |
           git config --global user.email "misso998@gmail.com"
           git config --global user.name "Mislav Jelusic"
-          git add python-app-service/Chart.yaml values.yaml
+          git add .
           git commit -m "Update version to $(cat python-app-service/Chart.yaml | grep version | cut -d ' ' -f 2)"
           git push origin main
 
