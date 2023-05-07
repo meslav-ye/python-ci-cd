@@ -74,8 +74,8 @@ jobs:
       - name: Increment version
         run: |
           VERSION=$(cat python-app-service/Chart.yaml | grep version | cut -d ' ' -f 2)
-          VERSION=$(echo $VERSION | awk -F '.' '{print $1"."$2"."$3+1}')
-          sed -i "s/version: $VERSION/version: $VERSION/g" python-app-service/Chart.yaml
+          NewVERSION=$(echo $VERSION | awk -F '.' '{print $1"."$2"."$3+1}')
+          sed -i "s/version: $VERSION/version: $NewVERSION/g" python-app-service/Chart.yaml
           currTag=$(cat python-app-service/values.yaml | grep -w tag | awk {'print $2'})
           sed -i "s/tag: $currTag/tag: ${{ github.sha }}/g" "python-app-service/values.yaml"
 
