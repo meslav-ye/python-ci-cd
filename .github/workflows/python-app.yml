@@ -37,7 +37,7 @@ jobs:
         pytest
         
   build-and-push-docker-image:
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
     steps:
     
