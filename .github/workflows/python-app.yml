@@ -10,8 +10,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -36,6 +35,7 @@ jobs:
       run: |
         export PYTHONPATH=src
         pytest
+        
   build-and-push-docker-image:
     needs: build
     runs-on: ubuntu-latest
